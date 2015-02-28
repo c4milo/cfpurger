@@ -1,5 +1,5 @@
 # cfpurger
-A 2 hour project that checks a given URL for changes in its HTML document to then purge Cloudflare's cache.
+A 2 hour project that checks a given URL for changes in its HTML document to then purges Cloudflare's cache for a given site.
 
 ## Usage
 ```shell
