@@ -15,8 +15,8 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-var url, cftkn, email string
-var dryrun bool
+var url, cftkn, email, Version string
+var dryrun, version bool
 var interval int
 
 func init() {
@@ -25,6 +25,7 @@ func init() {
 	flag.StringVar(&email, "email", "", "Cloudflare account email")
 	flag.StringVar(&url, "url", "", "The url to watch for changes")
 	flag.BoolVar(&dryrun, "dryrun", false, "Simulates a purging without hitting Cloudflare.")
+	flag.BoolVar(&version, "version", false, "Prints version")
 	flag.IntVar(&interval, "interval", 15, "The time in seconds to check for changes.")
 }
 
@@ -32,6 +33,11 @@ var lastChecksum string
 
 func main() {
 	flag.Parse()
+
+	if version {
+		log.Println(Version)
+		return
+	}
 
 	if url == "" || cftkn == "" || email == "" {
 		flag.Usage()
