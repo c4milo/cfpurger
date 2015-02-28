@@ -6,6 +6,7 @@ proceeds to purge Cloudflare's cache.
 ```shell
 $ ./cfpurger
 Usage of ./cfpurger:
+  -cfsite="": The name of the site to purge in Cloudflare
   -cftkn="": Cloudflare API token
   -dryrun=false: Simulates a purging without hitting Cloudflare.
   -email="": Cloudflare account email
