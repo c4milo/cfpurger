@@ -7,7 +7,6 @@ import (
 	"flag"
 	"io/ioutil"
 	"log"
-	"net"
 	"net/http"
 	neturl "net/url"
 	"time"
@@ -15,13 +14,14 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-var url, cftkn, email, Version string
+var url, cftkn, email, cfsite, Version string
 var dryrun, version bool
 var interval int
 
 func init() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	flag.StringVar(&cftkn, "cftkn", "", "Cloudflare API token")
+	flag.StringVar(&cfsite, "cfsite", "", "The name of the site to purge in Cloudflare")
 	flag.StringVar(&email, "email", "", "Cloudflare account email")
 	flag.StringVar(&url, "url", "", "The url to watch for changes")
 	flag.BoolVar(&dryrun, "dryrun", false, "Simulates a purging without hitting Cloudflare.")
@@ -39,7 +39,7 @@ func main() {
 		return
 	}
 
-	if url == "" || cftkn == "" || email == "" {
+	if url == "" || cftkn == "" || email == "" || cfsite == "" {
 		flag.Usage()
 		return
 	}
@@ -68,18 +68,12 @@ func purge(url string) (*CFResponse, bool) {
 		return nil, false
 	}
 
-	host, _, err := net.SplitHostPort(u.Host)
-	if err != nil {
-		log.Printf("[WARN] %#v", err)
-		host = u.Host
-	}
-
 	// Full purge by default unless the URL has a path
 	params := neturl.Values{
 		"a":     {"fpurge_ts"},
 		"tkn":   {cftkn},
 		"email": {email},
-		"z":     {host},
+		"z":     {cfsite},
 		"v":     {"1"},
 	}
 
